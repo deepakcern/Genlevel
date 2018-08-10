@@ -16,9 +16,10 @@ path = '/afs/cern.ch/work/d/dekumar/delete/Genlevel/GenPlotter/LHEFile_100GeV_cu
 runs=['01','02','03','04','05']
 
 hists=[]
-genMET=[]
+
 
 for i in runs:
+    genMET=[]
     h_genMET=TH1F('genMET'+i,"",100,0,1000)
     file=glob.glob(path+'run_'+i+'/*')
     tree=ET.parse(str(file[0]))
