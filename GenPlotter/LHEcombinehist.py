@@ -11,7 +11,7 @@ gStyle.SetFillColor(2)
 gStyle.SetLineWidth(1)
 gStyle.SetHistFillStyle(2)
 
-path = '/home/deepak/Desktop/LHEFile/MH4scanequal_M_lamda0/'
+path = '/afs/cern.ch/work/d/dekumar/public/forbbDM_lhe/lhefiles_tanbeta_35_mh3_600_mchi_10_2016/'
 
 runs=['01','02','03','04','05']
 
@@ -41,6 +41,7 @@ for i in runs:
                 pz=float (phi[0].split()[8])
                 e=float (phi[0].split()[9])
                 p=TLorentzVector(px,py,pz,e)
+                genMET.append(p.Pt())
 
             px1=float (chi[0].split()[6])
             py1=float (chi[0].split()[7])
@@ -56,14 +57,16 @@ for i in runs:
             p2=TLorentzVector(px2,py2,pz2,e2)
 
             pi=p1+p2
-            genMET.append(pi.Pt())
+            #genMET.append(pi.Pt())
+            #if pi.Pt() < 50:
+	#	print ("Entered")
     for met in genMET:
             h_genMET.Fill(met)
     hists.append(h_genMET)
 
-legend=TLegend(.33,.69,.57,.89)
+legend=TLegend(.53,.59,.87,.89)
 legend.SetTextSize(0.038)
-leg_entry=['M_{H4}=50 GeV','M_{H4}=100 GeV','M_{H4}=350 GeV','M_{H4}=400 GeV','M_{H4}=500 GeV']
+leg_entry=['M_{a}=50 GeV','M_{a}=100 GeV','M_{a}=350 GeV','M_{a}=400 GeV','M_{a}=500 GeV']
 
 
 cmsname=TLatex(0.15,0.95,' 2HDM+a Model        bb+DM')
@@ -105,4 +108,5 @@ for hist in range(len(hists)):
 cmsname.Draw()
 legend.Draw()
 
-c.SaveAs("test0.png")
+c.SaveAs("CombinedMa.png")
+c.SaveAs("CombinedMa.pdf")
