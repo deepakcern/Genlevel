@@ -58,8 +58,7 @@ for i in runs:
 
             pi=p1+p2
             genMET.append(pi.Pt())
-            #if pi.Pt() < 50:
-	#	print ("Entered")
+
     for met in genMET:
             h_genMET.Fill(met)
     hists.append(h_genMET)
