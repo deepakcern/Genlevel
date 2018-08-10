@@ -57,7 +57,7 @@ for i in runs:
             p2=TLorentzVector(px2,py2,pz2,e2)
 
             pi=p1+p2
-            #genMET.append(pi.Pt())
+            genMET.append(pi.Pt())
             #if pi.Pt() < 50:
 	#	print ("Entered")
     for met in genMET:
