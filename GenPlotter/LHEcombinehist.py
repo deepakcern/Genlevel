@@ -11,7 +11,7 @@ gStyle.SetFillColor(2)
 gStyle.SetLineWidth(1)
 gStyle.SetHistFillStyle(2)
 
-path = '/afs/cern.ch/work/d/dekumar/public/forbbDM_lhe/lhefiles_tanbeta_35_mh3_600_mchi_10_2016/'
+path = '/afs/cern.ch/work/d/dekumar/delete/Genlevel/GenPlotter/LHEFile_100GeV_cut/'
 
 runs=['01','02','03','04','05']
 
