@@ -41,7 +41,7 @@ for i in runs:
                 pz=float (phi[0].split()[8])
                 e=float (phi[0].split()[9])
                 p=TLorentzVector(px,py,pz,e)
-                genMET.append(p.Pt())
+                # genMET.append(p.Pt())
 
             px1=float (chi[0].split()[6])
             py1=float (chi[0].split()[7])
