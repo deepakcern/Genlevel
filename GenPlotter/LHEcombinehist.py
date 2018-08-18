@@ -11,7 +11,7 @@ gStyle.SetFillColor(2)
 gStyle.SetLineWidth(1)
 gStyle.SetHistFillStyle(2)
 
-path = '/afs/cern.ch/work/d/dekumar/delete/Genlevel/GenPlotter/LHEFile_100GeV_cut/'
+path = '/afs/cern.ch/work/d/dekumar/public/delete2/Genlevel/GenPlotter/LHEFile_100GeV_cut/'
 
 runs=['01','02','03','04','05']
 
@@ -26,39 +26,44 @@ for i in runs:
     root=tree.getroot()
     for child in root:
         if (child.tag=='event'):
+
             lines=child.text.strip().split('\n')
             event_header=lines[0].strip()
             num_part=int(event_header.split()[0].strip())
+            if float (event_header.split()[2]) > 0:
 
-            phi=[s for s in lines if s.split()[0]=='55']
-            chi=[s for s in lines if s.split()[0]=='52']
-            chibar=[s for s in lines if s.split()[0]=='-52']
-            b=[s for s in lines if s.split()[0]=='5']
-            bbar=[s for s in lines if s.split()[0]=='-5']
+                phi=[s for s in lines if s.split()[0]=='55']
+                chi=[s for s in lines if s.split()[0]=='52']
+                chibar=[s for s in lines if s.split()[0]=='-52']
+                b=[s for s in lines if s.split()[0]=='5']
+                bbar=[s for s in lines if s.split()[0]=='-5']
 
-            if phi:
-                px=float (phi[0].split()[6])
-                py=float (phi[0].split()[7])
-                pz=float (phi[0].split()[8])
-                e=float (phi[0].split()[9])
-                p=TLorentzVector(px,py,pz,e)
-                # genMET.append(p.Pt())
+                if phi:
+                    px=float (phi[0].split()[6])
+                    py=float (phi[0].split()[7])
+                    pz=float (phi[0].split()[8])
+                    e=float (phi[0].split()[9])
+                    p=TLorentzVector(px,py,pz,e)
+                    # genMET.append(p.Pt())
 
-            px1=float (chi[0].split()[6])
-            py1=float (chi[0].split()[7])
-            pz1=float (chi[0].split()[8])
-            e1=float (chi[0].split()[9])
+                px1=float (chi[0].split()[6])
+                py1=float (chi[0].split()[7])
+                pz1=float (chi[0].split()[8])
+                e1=float (chi[0].split()[9])
 
-            px2=float (chibar[0].split()[6])
-            py2=float (chibar[0].split()[7])
-            pz2=float (chibar[0].split()[8])
-            e2=float (chibar[0].split()[9])
+                px2=float (chibar[0].split()[6])
+                py2=float (chibar[0].split()[7])
+                pz2=float (chibar[0].split()[8])
+                e2=float (chibar[0].split()[9])
 
-            p1=TLorentzVector(px1,py1,pz1,e1)
-            p2=TLorentzVector(px2,py2,pz2,e2)
+                p1=TLorentzVector(px1,py1,pz1,e1)
+                p2=TLorentzVector(px2,py2,pz2,e2)
 
-            pi=p1+p2
-            genMET.append(pi.Pt())
+                pi=p1+p2
+                genMET.append(pi.Pt())
+                if pi.Pt() < 100:
+			print (child.text)
+			print ("met",pi.Pt())
 
     for met in genMET:
             h_genMET.Fill(met)
