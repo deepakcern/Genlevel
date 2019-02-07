@@ -1,3 +1,11 @@
+
+#Not before running this script you need to follow below commands
+#cd CMSSW_9_x/src
+#wget http://madgraph.hep.uiuc.edu/Downloads/ExRootAnalysis/ExRootAnalysis_V1.0.10.tar.gz
+#tar zxvf ExRootAnalysis_V1.0.10.tar.gz
+#cd ExRootAnalysis/
+#make
+
 class cTerm:
     PURPLE = '\033[95m'
     CYAN = '\033[96m'
