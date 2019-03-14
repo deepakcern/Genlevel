@@ -185,10 +185,10 @@ for i in range(len(myhist)):
         if normCS:
                 print ("doing CS norm")
 		myhist[i].Scale(CS[i]/myhist[i].Integral())
-		myhist[i].Add(myhist[i],myhist[i-1],1.0,1.0)
+		#myhist[i].Add(myhist[i],myhist[i-1],1.0,1.0)
 		#myhist[i].Draw('HIST')
                 h3=AddHist(myhist[i],myhist[i-1])
-                h3.Draw('HIST')
+h3.Draw('HIST')
 	#c.SaveAs('combinedHiggs_2HDMa'+legTan[i]+'.pdf')
 
 #cmsname.Draw()
