@@ -1,8 +1,24 @@
 #!/usr/bin/env python
 import ROOT as ROOT
-from ROOT import TLorentzVector, TCanvas, TH1F,TLegend,gStyle,TLatex,TFile
+from ROOT import TLorentzVector, TCanvas, TH1F,TLegend,gStyle,TLatex,TFile,kBlack
 import os
 import glob
+
+
+
+def AddHist(h1, h2):
+     h3 = h1.Clone("h3")
+     h3.SetLineColor(kBlack)
+     h3.SetMarkerStyle(20)
+     h3.SetTitle("")
+     h3.SetMinimum(0.1)
+     h3.SetMaximum(1.35)
+
+     # Set up plot for markers and errors
+     #h3.Sumw2()
+     h3.SetStats(0)
+     h3.Add(h2)
+     return h3
 
 def SetCanvas():
 
@@ -97,7 +113,7 @@ c      = SetCanvas()
 legend = CreateLegend(0.60, 0.94, 0.75, 0.92, "")
 
 #path ='/afs/cern.ch/work/d/dekumar/LHE_Plots/*'
-path = '/afs/cern.ch/work/d/dekumar/gridpacktest/CMSSW_9_3_8/src/bb_int_LHE/*'
+path = '/afs/cern.ch/work/d/dekumar/LHE_Plots/bb_ggFCombined/BenidiktFiles/*.root'#'/afs/cern.ch/work/d/dekumar/LHE_Plots/bb_ggFCombined/rootFiles/*'#'/afs/cern.ch/work/d/dekumar/gridpacktest/CMSSW_9_3_8/src/bb_int_LHE/*'
 
 MH4=['100','200','300','400','500']
 sintheta=['0p3','0p4','0p6','0p7','0p8','0p9']
@@ -108,15 +124,21 @@ legTan=['tan#beta=0.5','tan#beta=1.5','tan#beta=10.0','tan#beta=20.0','tan#beta=
 # mchi=['1','10','50','150','500','1000']
 col=[1,2,4,6,7,8]
 myhist=[]
+CS=[0.0749,0.0009226]
 files = sorted(glob.glob(path))
 #for i in MH4:
 #for i in sintheta:
-for i in tanbeta:
+normCS=True
+proc=['bb','gg']
+for i in proc:
     for file in files:
+       # print "myfile",file
         #f=TFile.Open(file,'read')
         #if 'MH3_600_MH4_'+i+'_MH2_600_MHC' in file.split('/')[-1]:
         #if '_2HDMa_bb_sinp_'+i+'_tanb_1p0_mXd_10_MH3_' in file.split('/')[-1]:
-        if '_2HDMa_bb_sinp_0p35_tanb_'+i+'_mXd_10_MH3_' in file.split('/')[-1]:
+        #if '2HDMa_'+i+'_sinp_0p35_tanb_20p0_mXd_10_MH3_600' in file.split('/')[-1]:
+        if '2HDMa_'+i+'_tb' in file.split('/')[-1]:
+		#print file
                 exec("f"+i+"=TFile.Open(file,'read')")
                 exec("print 'selected file'"+","+"f"+i)
     	        exec("hist_met=f"+i+".Get('getMET')")
@@ -138,10 +160,14 @@ for i in range(len(myhist)):
         myhist[i].SetLineWidth(3)
         #myhist[i].GetXaxis().SetRangeUser(0, 500)
         #myhist[i].SetMaximum(2)
-        myhist[i].Scale(1/myhist[i].Integral())
-        legend.AddEntry(myhist[i],legTan[i],"L")
-        myhist[i].SetMaximum(0.4)
-        myhist[i].Draw('HIST')
+        if not normCS:
+        	myhist[i].Scale(1/myhist[i].Integral())
+        	legend.AddEntry(myhist[i],legTan[i],"L")
+        	myhist[i].SetMaximum(0.4)
+        	myhist[i].Draw('HIST')
+        if normCS:
+		myhist[i].Scale(CS[i]/myhist[i].Integral())
+                print "doing CS norm"
 	#c.SaveAs('combinedHiggs_2HDMa'+legTan[i]+'.pdf')
 
     else:
@@ -151,10 +177,18 @@ for i in range(len(myhist)):
         myhist[i].Rebin(2)
         myhist[i].SetLineWidth(3)
         #myhist[i].SetMaximum(2)
-        myhist[i].Scale(1/myhist[i].Integral())
-        legend.AddEntry(myhist[i],legTan[i],"L")
-        myhist[i].SetMaximum(0.4)
-        myhist[i].Draw('HIST same')
+        if not normCS:
+        	myhist[i].Scale(1/myhist[i].Integral())
+        	legend.AddEntry(myhist[i],legTan[i],"L")
+        	myhist[i].SetMaximum(0.4)
+        	myhist[i].Draw('HIST same')
+        if normCS:
+                print ("doing CS norm")
+		myhist[i].Scale(CS[i]/myhist[i].Integral())
+		myhist[i].Add(myhist[i],myhist[i-1],1.0,1.0)
+		#myhist[i].Draw('HIST')
+                h3=AddHist(myhist[i],myhist[i-1])
+                h3.Draw('HIST')
 	#c.SaveAs('combinedHiggs_2HDMa'+legTan[i]+'.pdf')
 
 #cmsname.Draw()
@@ -169,5 +203,5 @@ t = ROOT.TPaveLabel(0.1, 0.96, 0.95, 0.99, "genMET Comparison", "brNDC")
 t.Draw('same')
 c.Update()
 
-c.SaveAs('combinedHiggs_2HDMa_bb.pdf')
-c.SaveAs('combinedHiggs_2HDMa_bb.png')
+c.SaveAs('combined_gg_bb.pdf')
+c.SaveAs('combined_gg_bb.png')
